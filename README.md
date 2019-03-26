@@ -46,3 +46,7 @@ optional arguments:
                                         replace old files if the code has changed.
   --overwrite                           If submission already exists, overwrite it.
 ```
+
+# Related Repositories
+
+- Princeton University has variants of this tool which integrates specifically in its Tigerfile submission platform: https://github.com/PrincetonUniversity/codePost-tools
