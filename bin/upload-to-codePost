@@ -14,13 +14,18 @@
 #
 ##########################################################################
 
+# Python 2
+from __future__ import print_function
+
 import os
 import sys
 from yaml import load, dump
 from argparse import ArgumentParser, FileType
-import codePost as cpUpload
 
-class color:
+import codePost_api as cP
+
+
+class _Color:
     PURPLE = '\033[95m'
     CYAN = '\033[96m'
     DARKCYAN = '\033[36m'
@@ -33,49 +38,29 @@ class color:
     END = '\033[0m'
 
 
-_TERM_ERROR = (color.END + color.RED + "[" + color.BOLD +
-               "ERROR" +
-               color.END + color.RED + "]" + color.END)
-
-_TERM_WARN = (color.END + color.BLUE + "[" + color.BOLD +
-              "WARNING" +
-              color.END + color.BLUE + "]" + color.END)
-
-_TERM_OK = (color.END + color.GREEN + "[" + color.BOLD +
-            "OK" +
-            color.END + color.GREEN + "]" + color.END)
-
-_TERM_INFO = (color.END + "[" + color.BOLD +
-              "INFO" +
-              color.END + "]" + color.END)
-
-try:
-    import click
-
-except ImportError:
-    print(_TERM_ERROR + " This tool requires the 'click' python package.", file=sys.stderr)
-    print("Try installing the package locally:", file=sys.stderr)
-    print("    pip install --user click", file=sys.stderr)
-    sys.exit(99)
+_TERM_INFO = "{END}[{BOLD}INFO{END}]{END}".format(**_Color.__dict__)
+_TERM_ERROR = "{END}[{BOLD}{RED}ERROR{END}]{END}".format(**_Color.__dict__)
+_TERM_OK = "{END}[{BOLD}{GREEN}OK{END}]{END}".format(**_Color.__dict__)
+_TERM_WARN = "{END}[{BOLD}{BLUE}INFO{END}]{END}".format(**_Color.__dict__)
 
 
 def _print_err(msg, fatal=None):
-    click.echo(message=_TERM_ERROR + " " + msg, err=True)
+    print("{} {}".format(_TERM_ERROR, msg), file=sys.stderr)
     # fatal contains an error number; if non-empty, exit
     if fatal != None:
         sys.exit(fatal)
 
 
 def _print_warn(msg):
-    click.echo(message=_TERM_WARN + " " + msg, err=True)
+    print("{} {}".format(_TERM_WARN, msg), file=sys.stderr)
 
 
 def _print_info(msg):
-    click.echo(message=_TERM_INFO + " " + msg, err=True)
+    print("{} {}".format(_TERM_INFO, msg), file=sys.stderr)
 
 
 def _print_ok(msg):
-    click.echo(message=_TERM_OK + " " + msg, err=False)
+    print("{} {}".format(_TERM_OK, msg))
 
 
 try:
@@ -181,24 +166,24 @@ for fileName in fileNames:
 
 
 # Set upload mode
-modeToUse = cpUpload.UploadModes.CAUTIOUS
+modeToUse = cP.UploadModes.CAUTIOUS
 if params['overwrite']:
-    modeToUse = cpUpload.UploadModes.OVERWRITE
+    modeToUse = cP.UploadModes.OVERWRITE
 elif params['extend']:
-    modeToUse = cpUpload.UploadModes.DIFFSCAN
+    modeToUse = cP.UploadModes.DIFFSCAN
 
 # call upload_single_submission
 try:
-    assignmentObj = cpUpload.get_assignment_info_by_name(params['api_key'],
-                                                         params['course_name'],
-                                                         params['course_period'],
-                                                         params['assignment_name'])
+    assignmentObj = cP.get_assignment_info_by_name(params['api_key'],
+                                                   params['course_name'],
+                                                   params['course_period'],
+                                                   params['assignment_name'])
 
-    cpUpload.upload_submission(api_key=params['api_key'],
-                               assignment=assignmentObj,
-                               students=studentList,
-                               files=parsedFiles,
-                               mode=modeToUse)
+    cP.upload_submission(api_key=params['api_key'],
+                         assignment=assignmentObj,
+                         students=studentList,
+                         files=parsedFiles,
+                         mode=modeToUse)
 
     _print_ok("Submission successfully uploaded.")
 except RuntimeError as e:

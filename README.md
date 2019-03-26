@@ -1,22 +1,31 @@
-# codePost Python Library
+# codePost Terminal Tools
 
-The codePost Python library provides a set of helper functions used to access the codePost API from applications written in the Python language. This repo also includes a command-line utility (`upload-to-codePost`) which utilizes the codePost Python library to provide language-agnostic access to a submission upload service. 
-
-## Documentation
-
-Check out the [Python API docs](http://docs.codepost.io/?python#introduction).
+The codePost Terminal Tools provides a set of tools to control your codePost course from the comfort of your terminal or shell scripts. These tools are built in Python 3.x using our codePost API Python bindings, which can also be installed from PyPi.
 
 ## Installation
 
-You don't to download this source code unless you want to modify the package. If you just want to use the package, you can run:
+You can install the codePost Terminal Tools in your path using pip:
+
 ```
-pip install --upgrade codePost
+pip install --upgrade codePost-tools
 ```
 
 ## Usage
-To use the functions available in `codePost_lib.py`, you must have a codePost API key. To retrieve an API key, you must be a admin of a course on codePost. You can do so at [https://codepost.io/settings](https://codepost.io/settings).
+
+To use the functions available in this library, you must have a codePost API key. As of March 2019, to retrieve a codePost API key, you must be a administrator of a course on codePost. It will then be accessible from https://codepost.io/settings.
+
+# Configuration
+
+For convenience, it is also possible to specify a default course name, course period and codePost API key, by providing these in a configuration file. This configuration file can be called `codepost-config.yaml` or `.codepost-config.yaml` and be located in the root of the local user's home directory.
+
+```
+api_key: "<API KEY HERE>" # https://codepost.io/settings
+course_name: "<COURSE NAME HERE>"
+course_period: "<COURSE PERIOD HERE>"
+```
 
 ## Command Line Syntax
+
 ```
 > ./upload-to-codePost --help
 usage: upload-to-codePost [-h] [-api_key API_KEY] [-course_name COURSE_NAME]
@@ -36,4 +45,4 @@ optional arguments:
   --extend                              If submission already exists, add new files to it and
                                         replace old files if the code has changed.
   --overwrite                           If submission already exists, overwrite it.
-  ```
+```

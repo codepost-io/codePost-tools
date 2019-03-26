@@ -1,16 +1,16 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 # The text of the README file
 README = open("README.md").read()
 
 # This call to setup() does all the work
 setup(
-    name="codePost",
-    version="1.0.5",
-    description="Python bindings for the codePost API",
+    name="codePost-tools",
+    version="1.0.0",
+    description="Command line tools to manage codePost from the comfort of your terminal!",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/codepost-io/codePost-python",
+    url="https://github.com/codepost-io/codePost-tools",
     author="codePost",
     author_email="team@codepost.io",
     license="MIT",
@@ -19,6 +19,12 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=find_packages(),
+    packages=[],
+    scripts=["bin/upload-to-codePost"],
+    install_requires=[
+        "codePost-api",
+        "PyYAML",
+        "requests"
+    ],
     include_package_data=True,
 )
