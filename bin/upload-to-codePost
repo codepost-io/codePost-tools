@@ -146,7 +146,15 @@ fileNames = params['files']
 parsedFiles = []
 for fileName in fileNames:
     try:
-        code = open(fileName, 'r', encoding='utf-8').read()
+        try:
+            # Python 3
+            code = open(fileName, 'r', encoding='utf-8').read()
+        except TypeError:
+            # Python 2
+            # https://stackoverflow.com/a/10975371/408734
+            import io
+            code = io.open(fileName, 'r', encoding='utf-8').read()
+
         path, extension = os.path.splitext(fileName)
         name = os.path.basename(fileName)
 
