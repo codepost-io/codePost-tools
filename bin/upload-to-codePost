@@ -165,7 +165,7 @@ for fileName in fileNames:
         parsedFiles.append(
             {
                 'name': name,
-                'extension': extension,
+                'extension': 'txt' if extension == '' else extension,
                 'code': code
             }
         )
