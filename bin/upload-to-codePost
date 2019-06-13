@@ -22,7 +22,14 @@ import sys
 from yaml import load, dump
 from argparse import ArgumentParser, FileType
 
-import codePost_api as cP
+# Cannot work without the codePost SDK
+try:
+    import codePost_api as cP
+except ImportError:
+    print("Fatal error: the 'codePost-api' Python package does not seem installed.")
+    print("   If you think it should be, it could be installed in a different Python distribution.")
+    print("   To install:     pip install --user codePost_api")
+    sys.exit(1)
 
 
 class _Color:
@@ -154,6 +161,11 @@ for fileName in fileNames:
             # https://stackoverflow.com/a/10975371/408734
             import io
             code = io.open(fileName, 'r', encoding='utf-8').read()
+        
+        # codePost's API does not currently allow empty files
+        if len(code) == 0:
+            _print_warn("Ignoring empty file: {}".format(fileName))
+            continue
 
         path, extension = os.path.splitext(fileName)
         name = os.path.basename(fileName)
@@ -170,7 +182,7 @@ for fileName in fileNames:
             }
         )
     except IOError:
-        _print_err("Error reading specified file: %s" % (fileName), fatal=True)
+        _print_err("Error reading specified file: {}".format(fileName), fatal=True)
 
 
 # Set upload mode
